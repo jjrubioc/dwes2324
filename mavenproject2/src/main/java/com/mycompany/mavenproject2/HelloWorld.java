@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "HelloWorld", urlPatterns = {"/helloworld"})
 public class HelloWorld extends HttpServlet {
 
+    DBConnection db = null;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,16 +32,29 @@ public class HelloWorld extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String deporte = request.getParameter("deporte");
+        if (deporte == null) {
+            this.db = new DBConnection();
+        } else if (deporte.isBlank()) {
+            // do nothing
+        } else {
+            db.insertSport(deporte);
+        }
+
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HelloWorld</title>");            
+            out.println("<title>Servlet HelloWorld de las once</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HelloWorld at " + request.getContextPath() + "</h1>");
+            out.println("<form action=\"helloworld\">\n"
+                    + "            Deporte:<input type=\"text\" name=\"deporte\"><!-- comment -->\n"
+                    + "            <input type=\"submit\" value=\"Insertar\">\n"
+                    + "        </form>");
             out.println("</body>");
             out.println("</html>");
         }
