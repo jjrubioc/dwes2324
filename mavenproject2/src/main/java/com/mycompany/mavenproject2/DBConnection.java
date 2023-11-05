@@ -21,10 +21,9 @@ public class DBConnection {
 
     public DBConnection() {
 
-//        String url = "jdbc:mysql://192.168.1.142/deportes?enabledTLSProtocols=TLSv1.2";
-//        String user = "user";
-//        String pass = "pass";
-        try {
+        try {   // cargar el driver de conexión con la base de datos adecuada
+            // y obtener la conexión a través de la IP, nombre de base de datos,
+            // usuario y contraseña
             Class.forName("org.mariadb.jdbc.Driver");
             this.c = DriverManager.getConnection(
                     "jdbc:mariadb://192.168.1.144:3306/deportes",
@@ -34,22 +33,20 @@ public class DBConnection {
             this.c = null;
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("conn: " + c);
+        System.out.println("conn: " + c.toString());  // para la verificación en consola
     }
 
     public int insertSport(String s) {
         String sqlSentence = "insert into deporte values ('" + s + "');";
-        System.out.println("Sentence: " + sqlSentence);
+        System.out.println("Sentence: " + sqlSentence);  // verificación en consola
         Statement st;
         int n = -1;
         try {
             st = this.c.createStatement();
-
             n = st.executeUpdate(sqlSentence);
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return n;
     }
-
 }
