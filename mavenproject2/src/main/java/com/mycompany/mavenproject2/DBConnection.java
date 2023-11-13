@@ -33,11 +33,25 @@ public class DBConnection {
             this.c = null;
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("conn: " + c.toString());  // para la verificación en consola
+        System.out.println("conn: " + c);  // para la verificación en consola
     }
 
-    public int insertSport(String s) {
-        String sqlSentence = "insert into deporte values ('" + s + "');";
+    public int insertSport(String deporte) {
+        String sqlSentence = "insert into deporte values ('" + deporte + "');";
+        System.out.println("Sentence: " + sqlSentence);  // verificación en consola
+        Statement st;
+        int n = -1;
+        try {
+            st = this.c.createStatement();
+            n = st.executeUpdate(sqlSentence);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+
+    public int deleteSport(String deporte) {
+        String sqlSentence = "delete from deporte where nombre like '" + deporte + "';";
         System.out.println("Sentence: " + sqlSentence);  // verificación en consola
         Statement st;
         int n = -1;

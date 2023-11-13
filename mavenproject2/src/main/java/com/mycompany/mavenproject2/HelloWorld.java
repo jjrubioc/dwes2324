@@ -34,12 +34,28 @@ public class HelloWorld extends HttpServlet {
             throws ServletException, IOException {
 
         String deporte = request.getParameter("deporte");
-        if (deporte == null) {
+        String task = request.getParameter("task");
+        if (deporte == null) { // first run from this client
             this.db = new DBConnection();
-        } else if (deporte.isBlank()) {
-            // do nothing
         } else {
-            db.insertSport(deporte);
+            switch (task) {
+                case "insert":
+                    if (deporte.isBlank()) {
+                        // do nothing
+                    } else {
+                        db.insertSport(deporte);
+                    }
+                    break;
+                case "delete":
+                    if (deporte.isBlank()) {
+                        // do nothing
+                    } else {
+                        db.deleteSport(deporte);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         response.setContentType("text/html;charset=UTF-8");
@@ -53,7 +69,13 @@ public class HelloWorld extends HttpServlet {
             out.println("<body>");
             out.println("<form action=\"helloworld\">\n"
                     + "            Deporte:<input type=\"text\" name=\"deporte\"><!-- comment -->\n"
-                    + "            <input type=\"submit\" value=\"Insertar\">\n"
+                    + "            <input type=\"hidden\" name=\"task\" value=\"insert\" \">\n"
+                    + "            <input type=\"submit\" value=\"Insert\">\n"
+                    + "        </form>");
+            out.println("<form action=\"helloworld\">\n"
+                    + "            Deporte:<input type=\"text\" name=\"deporte\"><!-- comment -->\n"
+                    + "            <input type=\"hidden\" name=\"task\" value=\"delete\" \">\n"
+                    + "            <input type=\"submit\" value=\"Delete\">\n"
                     + "        </form>");
             out.println("</body>");
             out.println("</html>");
